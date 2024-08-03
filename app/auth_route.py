@@ -50,7 +50,7 @@ def login():
     
     person = User.query.filter_by(email=email).first()
     if not person:
-        return jsonify({'message': "Player not found"}), 404
+        return jsonify({'message': "User not found"}), 404
     
     pass_ok = bcrypt.check_password_hash(person.hash_password.encode('utf-8'), password)
     if not pass_ok:
@@ -63,7 +63,7 @@ def login():
     )
    
     return jsonify({
-        'player': {
+        'user': {
             'id': person.id,
             'username': person.username,
             'email': person.email
