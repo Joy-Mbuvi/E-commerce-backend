@@ -25,6 +25,9 @@ def create_app():
     from .auth_route import auth_blueprint
     app.register_blueprint(auth_blueprint)
 
+    from .market_route import market_blueprint
+    app.register_blueprint(market_blueprint)
+
     
 
     return app
