@@ -28,6 +28,9 @@ def create_app():
     from .market_route import market_blueprint
     app.register_blueprint(market_blueprint)
 
+    from .order_route import order_routes
+    app.register_blueprint(order_routes)
+
     
 
     return app
