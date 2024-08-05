@@ -22,7 +22,6 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, nullable=False)
-    images = db.relationship('ProductImage', backref='product', lazy=True)
 
 class Cart(db.Model):
     __tablename__='cart'
@@ -41,8 +40,3 @@ class Order(db.Model):
     status = db.Column(db.String(20), nullable=False, default='Pending')
     total_price = db.Column(db.Float, nullable=False)
 
-class ProductImage(db.Model):
-    __tablename__='productimage'
-    id = db.Column(db.Integer, primary_key=True)
-    product_id= db.Column(db.Integer,db.ForeignKey('product.id'))
-    image_url = db.Column(db.String(255), nullable=False)
