@@ -23,6 +23,17 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, nullable=False)
 
+class CartItem(db.Model):
+    __tablename__ = 'cart_item'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
+
+    cart = db.relationship('Cart', back_populates='items')
+    product = db.relationship('Product')
+
 class Cart(db.Model):
     __tablename__='cart'
 
@@ -30,6 +41,7 @@ class Cart(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     product_id= db.Column(db.Integer,db.ForeignKey('product.id'))
     quantity= db.Column(db.Integer)
+    items = db.relationship('CartItem', back_populates='cart', cascade='all, delete-orphan')
 
 class Order(db.Model):
     __tablename__='order'

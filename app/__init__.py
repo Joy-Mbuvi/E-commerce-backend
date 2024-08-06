@@ -32,6 +32,9 @@ def create_app():
     from .order_route import order_routes
     app.register_blueprint(order_routes)
 
+    from .cart_route import cart_routes
+    app.register_blueprint(cart_routes)
+
     
 
     return app
