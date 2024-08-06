@@ -10,6 +10,7 @@ psycopg2-binary = "*"
 flask-sqlalchemy = "*"
 flask-jwt-extended = "*"
 flask-bcrypt = "*"
+flask-cors = "*"
 
 [dev-packages]
 

@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
+from flask_cors import cross_origin
 from .import db, bcrypt
 from .models import User
 from datetime import timedelta, datetime
@@ -7,6 +8,7 @@ from datetime import timedelta, datetime
 auth_blueprint = Blueprint('auth', __name__)
 
 @auth_blueprint.route("/signup", methods=["POST"])
+@cross_origin()
 def signup():
     body = request.get_json()
     username = body.get('username')
@@ -39,6 +41,7 @@ def signup():
     return jsonify({"message": "Sign up successful"}), 201
 
 @auth_blueprint.route("/login", methods=["POST"])
+@cross_origin()
 def login():
     body = request.get_json()
     email = body.get('email')

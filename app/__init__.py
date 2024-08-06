@@ -1,9 +1,9 @@
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -12,6 +12,7 @@ migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
     app.config['SECRET_KEY'] = 'your-secret-key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.dbibnqaixuihilmanvwq:auroraprimegroup3@aws-0-eu-central-1.pooler.supabase.com:6543/postgres'
     app.config['JWT_SECRET_KEY'] = 'your-jwt-secret-key'
