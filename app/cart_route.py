@@ -39,7 +39,7 @@ def add_to_cart():
     
     product = Product.query.get(product_id)
     if not product:
-        return jsonify({'message': 'Product not found'}), 404
+        return jsonify({'message': 'Product not found :('}), 404
     
     cart = Cart.query.filter_by(user_id=user.id).first()
     if not cart:
