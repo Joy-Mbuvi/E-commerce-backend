@@ -118,3 +118,5 @@ def clear_cart():
     
     db.session.commit()
     return jsonify({'message': 'Cart cleared'}), 200
+
+

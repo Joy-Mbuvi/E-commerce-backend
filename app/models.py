@@ -53,3 +53,8 @@ class Order(db.Model):
     status = db.Column(db.String(20), nullable=False, default='Pending')
     total_price = db.Column(db.Float, nullable=False)
 
+class Favourite(db.Model):
+  __tablename__='favourites'
+  id=db.Column(db.Integer,primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+  product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)

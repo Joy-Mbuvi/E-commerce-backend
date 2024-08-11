@@ -35,6 +35,8 @@ def create_app():
     from .cart_route import cart_routes
     app.register_blueprint(cart_routes)
 
+    from .favourite_route import favourite_blueprint
+    app.register_blueprint(favourite_blueprint)
     
 
     return app

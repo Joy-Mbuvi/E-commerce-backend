@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from .models import Product
+
+
 product_blueprint = Blueprint('product', __name__)
 
 @product_blueprint.route("/products", methods=['GET'])
@@ -15,7 +17,7 @@ def get_all_product():#unapat all product
             "description": product.description,
             "price": product.price,
             "stock": product.stock,
-            "image_url":product.image_url
+            "image_url":product.imaage_url
         })
 
  return jsonify(products_list)
@@ -38,7 +40,7 @@ def search_product():
             "description": product.description,
             "price": product.price,
             "stock": product.stock,
-            "image_url":product.image_url
+            "image_url":product.imaage_url
 
         })
 

@@ -59,11 +59,12 @@ def login():
     if not pass_ok:
         return jsonify({"message": "Invalid password"}), 401
 
-    expires = datetime.utcnow() + timedelta(hours=24)
+    expires = timedelta(hours=24)
     access_token = create_access_token(
-        identity={"id": person.id, "username": person.username},
-        expires_delta=(expires - datetime.utcnow())
-    )
+    identity={"id": person.id, "username": person.username},
+    expires_delta=expires
+)
+
    
     return jsonify({
         'user': {
