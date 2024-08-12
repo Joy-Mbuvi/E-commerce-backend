@@ -17,7 +17,7 @@ def get_all_product():#unapat all product
             "description": product.description,
             "price": product.price,
             "stock": product.stock,
-            "image_url":product.imaage_url
+            "image_url":product.image_url
         })
 
  return jsonify(products_list)
