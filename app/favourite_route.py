@@ -1,7 +1,7 @@
 from flask import Blueprint,jsonify,request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import db
-from .models import Favourite,User,Product
+from .models import Favourite,Product
 
 favourite_blueprint=Blueprint("favourite_route",__name__)
 
@@ -33,7 +33,8 @@ def view_favourites():
 def add_favourites():
     current_user=get_jwt_identity()
     user_id = current_user['id']
-    data=request.get__json()
+    data = request.get_json()
+
     product_id=data.get("product_id")
 
     favourites=Favourite.query.filter_by(user_id=user_id,product_id=product_id).first()

@@ -32,8 +32,10 @@ def signup():
     if existing_user:
        return jsonify({'message': f"Email already in use {email}"}), 400
     
-    hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
-    
+    hashed_password = bcrypt.generate_password_hash ('password').decode('utf-8') 
+
+
+
     person = User(username=username, email=email, hash_password=hashed_password)
     db.session.add(person)
     db.session.commit()
