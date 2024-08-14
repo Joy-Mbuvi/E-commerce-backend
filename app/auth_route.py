@@ -1,11 +1,13 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token,jwt_required,get_jwt
 from flask_cors import cross_origin
 from .import db, bcrypt
 from .models import User
 from datetime import timedelta, datetime
 
 auth_blueprint = Blueprint('auth', __name__)
+
+blacklisted_tokens=set()
 
 @auth_blueprint.route("/signup", methods=["POST"])
 @cross_origin()
@@ -77,3 +79,10 @@ def login():
         'token': access_token
     })
 
+@auth_blueprint.route("/logout", methods=["POST"])
+@cross_origin()
+@jwt_required()
+def logout():
+    jti = get_jwt()['jti']  # Get the JTI from the JWT
+    blacklisted_tokens.add(jti)
+    return jsonify({"message": "User logged out successfully"}), 200
