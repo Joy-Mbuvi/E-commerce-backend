@@ -1,14 +1,14 @@
 from . import db
 
 class User(db.Model):
-    __tablename__='user'
+    __tablename__ = 'user'
 
     id = db.Column(db.BigInteger, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    hash_password=db.Column(db.String(140),unique=True,nullable=False)
+    hash_password = db.Column(db.String(140), unique=True, nullable=False)
     orders = db.relationship('Order', backref='user', lazy=True)
-    cart = db.relationship('Cart', backref='user', uselist=False)
+    cart = db.relationship('Cart', backref='user', uselist=False, lazy='joined')
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -36,12 +36,10 @@ class CartItem(db.Model):
     product = db.relationship('Product')
 
 class Cart(db.Model):
-    __tablename__='cart'
+    __tablename__ = 'cart'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    product_id= db.Column(db.Integer,db.ForeignKey('product.id'))
-    quantity= db.Column(db.Integer)
+    user_id = db.Column(db.BigInteger, db.ForeignKey('user.id'), nullable=False, unique=True)
     items = db.relationship('CartItem', back_populates='cart', cascade='all, delete-orphan')
 
 class Order(db.Model):

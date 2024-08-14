@@ -30,31 +30,40 @@ def view_cart():
 @cart_routes.route('/cart/add', methods=['POST'])
 @jwt_required()
 def add_to_cart():
-    current_user = get_jwt_identity()
-    user = User.query.get(current_user['id'])
-    data = request.get_json()
-    
-    product_id = data.get('product_id')
-    quantity = data.get('quantity', 1)
-    
-    product = Product.query.get(product_id)
-    if not product:
-        return jsonify({'message': 'Product not found :('}), 404
-    
-    cart = Cart.query.filter_by(user_id=user.id).first()
-    if not cart:
-        cart = Cart(user_id=user.id)
-        db.session.add(cart)
-    
-    cart_item = next((item for item in cart.items if item.product_id == product_id), None)
-    if cart_item:
-        cart_item.quantity += quantity
-    else:
-        cart_item = CartItem(cart_id=cart.id, product_id=product_id, quantity=quantity)
-        db.session.add(cart_item)
-    
-    db.session.commit()
-    return jsonify({'message': 'Item added to cart'}), 201
+    try:
+        current_user = get_jwt_identity()
+        user = User.query.get(current_user['id'])
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+
+        data = request.get_json()
+        product_id = data.get('product_id')
+        quantity = data.get('quantity', 1)
+
+        product = Product.query.get(product_id)
+        if not product:
+            return jsonify({'message': 'Product not found :('}), 404
+
+        if not user.cart:
+            cart = Cart(user_id=user.id)
+            db.session.add(cart)
+            db.session.flush()  # This will assign an ID to the cart without committing the transaction
+        else:
+            cart = user.cart
+
+        cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product_id).first()
+        if cart_item:
+            cart_item.quantity += quantity
+        else:
+            cart_item = CartItem(cart_id=cart.id, product_id=product_id, quantity=quantity)
+            db.session.add(cart_item)
+
+        db.session.commit()
+        return jsonify({'message': 'Item added to cart'}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error in add_to_cart: {str(e)}")
+        return jsonify({'message': 'An error occurred while processing your request'}), 500
 
 @cart_routes.route('/cart/update', methods=['PUT'])
 @jwt_required()
