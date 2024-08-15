@@ -103,6 +103,8 @@ def remove_from_cart():
     
     product_id = data.get('product_id')
     
+
+
     cart = Cart.query.filter_by(user_id=user.id).first()
     if not cart:
         return jsonify({'message': 'Cart not found'}), 404
