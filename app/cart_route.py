@@ -50,7 +50,7 @@ def add_to_cart():
         if not user.cart:
             cart = Cart(user_id=user.id)
             db.session.add(cart)
-            db.session.flush()  # This will assign an ID to the cart without committing the transaction
+            db.session.flush()  
         else:
             cart = user.cart
 
@@ -107,15 +107,17 @@ def remove_from_cart():
     if not cart:
         return jsonify({'message': 'Cart not found'}), 404
     
-    cart_item = next((item for item in cart.items if item.product_id == product_id), None)
+    cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product_id).first()
     if not cart_item:
         return jsonify({'message': 'Item not in cart'}), 404
     
     db.session.delete(cart_item)
     db.session.commit()
+    
     return jsonify({'message': 'Item removed from cart'}), 200
 
 @cart_routes.route('/cart/clear', methods=['DELETE'])
+
 @jwt_required()
 def clear_cart():
     current_user = get_jwt_identity()
