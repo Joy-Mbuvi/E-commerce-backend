@@ -108,9 +108,14 @@ def remove_from_cart():
         return jsonify({'message': 'Cart not found'}), 404
     
     cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product_id).first()
-  
-    db.session.delete(cart_item)
-    db.session.commit()
     
-    return jsonify({'message': 'Item removed from cart'}), 200
-
+    if not cart_item:
+        return jsonify({'message': 'Item not in cart'}), 404
+    
+    try:
+        db.session.delete(cart_item)
+        db.session.commit()
+        return jsonify({'message': 'Item removed from cart'}), 200
+    except Exception as e:
+        app.logger.error(f"Error removing item from cart: {str(e)}")
+        return jsonify({'message': 'Failed to remove item from cart'}), 500
