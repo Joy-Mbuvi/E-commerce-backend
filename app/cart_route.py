@@ -37,7 +37,7 @@ def add_to_cart():
         current_user = get_jwt_identity()
         user = User.query.get(current_user['id'])
         if not user:
-            return jsonify({'message': 'User not found'}), 404
+            return jsonify({'message': 'User not found'}), 200
 
         data = request.get_json()
         product_id = data.get('product_id')
@@ -45,7 +45,7 @@ def add_to_cart():
 
         product = Product.query.get(product_id)
         if not product:
-            return jsonify({'message': 'Product not found :('}), 404
+            return jsonify({'message': 'Product not found :('}), 200
 
         if not user.cart:
             cart = Cart(user_id=user.id)
@@ -80,11 +80,11 @@ def update_cart_item():
     
     cart = Cart.query.filter_by(user_id=user.id).first()
     if not cart:
-        return jsonify({'message': 'Cart not found'}), 404
+        return jsonify({'message': 'Cart not found'}), 200
     
     cart_item = next((item for item in cart.items if item.product_id == product_id), None)
     if not cart_item:
-        return jsonify({'message': 'Item not in cart'}), 404
+        return jsonify({'message': 'Item not in cart'}), 200
     
     if new_quantity > 0:
         cart_item.quantity = new_quantity
@@ -101,18 +101,18 @@ def remove_from_cart():
     user = User.query.get(current_user['id'])
     data = request.get_json()
     
-    product_id = data.get('product_id')
+    product_id = data['product_id']
     
 
 
     cart = Cart.query.filter_by(user_id=user.id).first()
     if not cart:
-        return jsonify({'message': 'Cart not found'}), 404
+        return jsonify({'message': 'Cart not found'}), 200
     
     cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product_id).first()
     
     if not cart_item:
-        return jsonify({'message': 'Item not in cart'}), 404
+        return jsonify({'message': 'Item not in cart'}), 200
     
     try:
         db.session.delete(cart_item)
