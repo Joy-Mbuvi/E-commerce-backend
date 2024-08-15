@@ -108,29 +108,9 @@ def remove_from_cart():
         return jsonify({'message': 'Cart not found'}), 404
     
     cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product_id).first()
-    if not cart_item:
-        return jsonify({'message': 'Item not in cart'}), 404
-    
+  
     db.session.delete(cart_item)
     db.session.commit()
     
     return jsonify({'message': 'Item removed from cart'}), 200
-
-@cart_routes.route('/cart/clear', methods=['DELETE'])
-
-@jwt_required()
-def clear_cart():
-    current_user = get_jwt_identity()
-    user = User.query.get(current_user['id'])
-    
-    cart = Cart.query.filter_by(user_id=user.id).first()
-    if not cart:
-        return jsonify({'message': 'Cart is already empty'}), 200
-    
-    for item in cart.items:
-        db.session.delete(item)
-    
-    db.session.commit()
-    return jsonify({'message': 'Cart cleared'}), 200
-
 
