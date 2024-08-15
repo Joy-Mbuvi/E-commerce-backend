@@ -45,3 +45,19 @@ def add_favourites():
     db.session.add(new_favourite)
     db.session.commit()
     return jsonify({"message":"Product successfully added to favourites"})
+
+
+@favourite_blueprint.route('/favourites/<int:id>', methods=['DELETE'])
+@jwt_required()
+def remove_favorite(id):
+    current_user = get_jwt_identity()
+    favorite = Favourite.query.filter_by(product_id=id, user_id=current_user['id']).first()
+    
+    if not favorite:
+        return jsonify({"message": "OOPS Not a Favourite!"}), 404
+    
+    db.session.delete(favorite)
+    db.session.commit()
+    
+    return jsonify({"message": "Favourite removed "}), 200
+

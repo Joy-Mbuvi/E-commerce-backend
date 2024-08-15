@@ -22,7 +22,10 @@ def view_cart():
             'product_id': product.id,
             'name': product.name,
             'price': product.price,
-            'quantity': item.quantity
+            'quantity': item.quantity,
+            "image_url" : product.image_url,
+            "description":product.description
+
         })
     
     return jsonify({'cart_items': cart_items}), 200

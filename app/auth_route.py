@@ -83,6 +83,6 @@ def login():
 @cross_origin()
 @jwt_required()
 def logout():
-    jti = get_jwt()['jti']  # Get the JTI from the JWT
+    jti = get_jwt()['jti']  
     blacklisted_tokens.add(jti)
     return jsonify({"message": "User logged out successfully"}), 200
